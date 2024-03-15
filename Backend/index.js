@@ -16,7 +16,12 @@ const app = express();
 app.use("/uploads", express.static("uploads"));
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL],
+    credentials: true,
+  })
+);
 const PORT = process.env.PORT || 5000;
 
 mongoose
@@ -30,9 +35,10 @@ mongoose
     console.log("error hna", error);
   });
 
-app.use("/", auth);
-app.use("/", profile);
-app.use("/", category);
-app.use("/", project);
-app.use("/", skill);
-app.use("/", contact);
+app.get("/", (req, res) => res.send("hello server is running"));
+app.use("/api", auth);
+app.use("/api", profile);
+app.use("/api", category);
+app.use("/api", project);
+app.use("/api", skill);
+app.use("/api", contact);
