@@ -36,12 +36,11 @@ mongoose
     console.log("error hna", error);
   });
 
-app.get("/", (req, res) => res.send("hello server is running"));
-app.use("/api", auth);
-app.use("/api", profile);
-app.use("/api", category);
-app.use("/api", project);
-app.use("/api", skill);
-app.use("/api", contact);
+app.use("/", auth);
+app.use("/", profile);
+app.use("/", category);
+app.use("/", project);
+app.use("/", skill);
+app.use("/", contact);
 
 module.exports = app;
