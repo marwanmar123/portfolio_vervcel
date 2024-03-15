@@ -26,7 +26,7 @@ function Register(props) {
 
     try {
       await axios.post(
-        "https://portfolio-vervcel.vercel.app/register",
+        "https://portfolio-murex-tau-95.vercel.app/register",
         { ...inputValue },
         { withCredentials: true }
       );

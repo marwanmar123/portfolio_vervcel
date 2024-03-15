@@ -13,7 +13,7 @@ const Categories = (props) => {
 
   const getCategories = async () => {
     const catgr = await axios.get(
-      "https://portfolio-vervcel.vercel.app/categories"
+      "https://portfolio-murex-tau-95.vercel.app/categories"
     );
     setCategories(catgr.data);
   };
@@ -21,7 +21,9 @@ const Categories = (props) => {
   const handleDelete = async (id) => {
     if (window.confirm("wach bs7 bghtu")) {
       try {
-        await axios.delete(`http://localhost:5000/category/delete/${id}`);
+        await axios.delete(
+          `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`
+        );
         setCategories(categories.filter((p) => p._id !== id));
         setDeleteMessage("rah tsuprima");
       } catch (er) {

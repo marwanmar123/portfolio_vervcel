@@ -13,7 +13,7 @@ export const UserContext = ({ children }) => {
       try {
         if (cookies.token) {
           const res = await axios.get(
-            "https://portfolio-vervcel.vercel.app/me",
+            "https://portfolio-murex-tau-95.vercel.app/me",
             { withCredentials: true }
           );
           setUser(res.data.user);
