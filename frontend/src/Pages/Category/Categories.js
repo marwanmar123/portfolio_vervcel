@@ -1,78 +1,70 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import CreateCategory from "./CreateCategory";
 
 const Categories = (props) => {
   const [categories, setCategories] = useState([]);
   const [deleteMessage, setDeleteMessage] = useState("");
-  const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
 
-  // Securely check for token existence and redirect if necessary
-  const isAuthenticated = () => {
-    if (!cookies.token) {
-      // Redirect to login if token is not present
-      navigate("/login");
-      return false; // Explicitly return false to block further execution
-    }
-    return true; // Token exists, proceed
-  };
+  const tokenExistsInCookie = document.cookie
+    .split(";")
+    .some((cookie) => cookie.trim().startsWith("token="));
 
   const getCategories = async () => {
-    const isUserAuthenticated = isAuthenticated(); // Check authentication first
-
-    if (isUserAuthenticated) {
-      // Only fetch categories if user is authenticated
-      try {
-        const catgr = await axios.get(
-          "https://portfolio-murex-tau-95.vercel.app/categories",
-          {
-            headers: {
-              Authorization: `Bearer ${cookies.token}`, // Include token in headers
-            },
-          }
-        );
-        setCategories(catgr.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
+    const response = await axios.get(
+      "https://portfolio-murex-tau-95.vercel.app/categories",
+      {
+        headers: {
+          Authorization: `Bearer ${getTokenFromCookie()}`, // Attach token to request headers
+        },
       }
-    }
+    );
+    setCategories(response.data);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("wach bs7 bghtu")) {
+    if (window.confirm("Are you sure you want to delete?")) {
       try {
-        const isUserAuthenticated = isAuthenticated(); // Check for token again
-
-        if (isUserAuthenticated) {
-          await axios.delete(
-            `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${cookies.token}`,
-              },
-            }
-          );
-          setCategories(categories.filter((p) => p._id !== id));
-          setDeleteMessage("rah tsuprima");
-        }
-      } catch (er) {
-        console.error("Error deleting category:", er);
+        await axios.delete(
+          `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${getTokenFromCookie()}`, // Attach token to request headers
+            },
+          }
+        );
+        setCategories(categories.filter((p) => p._id !== id));
+        setDeleteMessage("Deleted successfully");
+      } catch (error) {
+        console.log("Error in delete operation", error);
       }
     }
   };
 
   useEffect(() => {
-    // Check authentication and fetch data on initial render and token change
-    getCategories();
+    if (!tokenExistsInCookie) {
+      navigate("/login");
+    } else {
+      getCategories();
+    }
     if (deleteMessage) {
       setTimeout(() => {
-        setDeleteMessage(null);
+        setDeleteMessage("");
       }, 2000);
     }
-  }, [cookies.token, deleteMessage, categories]); // Add `cookies.token` to dependencies
+  }, [tokenExistsInCookie, deleteMessage, navigate, categories]);
+
+  const getTokenFromCookie = () => {
+    const tokenCookie = document.cookie
+      .split(";")
+      .find((cookie) => cookie.trim().startsWith("token="));
+    if (tokenCookie) {
+      return tokenCookie.split("=")[1];
+    }
+    return null;
+  };
 
   return (
     <div>
