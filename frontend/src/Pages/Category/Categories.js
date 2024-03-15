@@ -16,9 +16,7 @@ const Categories = (props) => {
     const response = await axios.get(
       "https://portfolio-murex-tau-95.vercel.app/categories",
       {
-        headers: {
-          Authorization: `Bearer ${getTokenFromCookie()}`, // Attach token to request headers
-        },
+        withCredentials: true,
       }
     );
     setCategories(response.data);
@@ -29,11 +27,7 @@ const Categories = (props) => {
       try {
         await axios.delete(
           `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${getTokenFromCookie()}`, // Attach token to request headers
-            },
-          }
+          { withCredentials: true }
         );
         setCategories(categories.filter((p) => p._id !== id));
         setDeleteMessage("Deleted successfully");
