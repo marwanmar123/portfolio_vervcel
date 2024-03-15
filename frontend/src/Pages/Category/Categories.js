@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import CreateCategory from "./CreateCategory";
 
 const Categories = (props) => {
   const [categories, setCategories] = useState([]);
   const [deleteMessage, setDeleteMessage] = useState("");
-  const [cookies] = useCookies(["token"]);
-  const isAuthenticated = cookies.token;
+  // const [cookies] = useCookies(["token"]);
+  // const isAuthenticated = cookies.token;
   const navigate = useNavigate();
 
   const getCategories = async () => {
@@ -32,16 +32,13 @@ const Categories = (props) => {
     }
   };
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
     getCategories();
     if (deleteMessage) {
       setTimeout(() => {
         setDeleteMessage(null);
       }, 2000);
     }
-  }, [isAuthenticated, categories, deleteMessage, navigate]);
+  }, [categories, deleteMessage, navigate]);
 
   return (
     <div>
