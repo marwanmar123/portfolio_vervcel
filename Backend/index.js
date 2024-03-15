@@ -36,6 +36,8 @@ mongoose
     console.log("error hna", error);
   });
 
+app.get("/", (req, res) => res.send("ok"));
+
 app.use("/", auth);
 app.use("/", profile);
 app.use("/", category);
