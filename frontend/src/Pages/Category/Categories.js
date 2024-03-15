@@ -1,44 +1,59 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import CreateCategory from "./CreateCategory";
 
 const Categories = (props) => {
   const [categories, setCategories] = useState([]);
   const [deleteMessage, setDeleteMessage] = useState("");
-  // const [cookies] = useCookies(["token"]);
-  // const isAuthenticated = cookies.token;
+  const [cookies] = useCookies(["token"]);
+  const isAuthenticated = !!cookies.token; // Check if token exists
   const navigate = useNavigate();
 
   const getCategories = async () => {
-    const catgr = await axios.get(
-      "https://portfolio-murex-tau-95.vercel.app/categories"
+    const response = await axios.get(
+      "https://portfolio-murex-tau-95.vercel.app/categories",
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`, // Attach token to request headers
+        },
+      }
     );
-    setCategories(catgr.data);
+    setCategories(response.data);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("wach bs7 bghtu")) {
+    if (window.confirm("Are you sure you want to delete?")) {
       try {
         await axios.delete(
-          `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`
+          `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`, // Attach token to request headers
+            },
+          }
         );
         setCategories(categories.filter((p) => p._id !== id));
-        setDeleteMessage("rah tsuprima");
-      } catch (er) {
-        console.log("mochkil f delete");
+        setDeleteMessage("Deleted successfully");
+      } catch (error) {
+        console.log("Error in delete operation", error);
       }
     }
   };
+
   useEffect(() => {
-    getCategories();
+    if (!isAuthenticated) {
+      navigate("/login");
+    } else {
+      getCategories();
+    }
     if (deleteMessage) {
       setTimeout(() => {
-        setDeleteMessage(null);
+        setDeleteMessage("");
       }, 2000);
     }
-  }, [categories, deleteMessage, navigate]);
+  }, [isAuthenticated, cookies.token, deleteMessage, navigate]);
 
   return (
     <div>
