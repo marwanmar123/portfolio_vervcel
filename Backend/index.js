@@ -16,16 +16,7 @@ const app = express();
 app.use("/uploads", express.static("uploads"));
 app.use(cookieParser());
 app.use(express.json());
-app.use(
-  cors({
-    origin: [
-      "http://localhost:3000",
-      "https://portfolio-vervcel.vercel.app",
-      "https://portfolio-vervcel-back.vercel.app",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 mongoose
