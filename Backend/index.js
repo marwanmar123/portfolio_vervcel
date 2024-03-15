@@ -13,6 +13,7 @@ const project = require("./Controllers/ProjectController");
 const contact = require("./Controllers/ContactController");
 
 const app = express();
+
 app.use("/uploads", express.static("uploads"));
 app.use(cookieParser());
 app.use(express.json());
@@ -42,3 +43,5 @@ app.use("/api", category);
 app.use("/api", project);
 app.use("/api", skill);
 app.use("/api", contact);
+
+module.exports = app;
