@@ -16,11 +16,11 @@ function LayoutDashboard(props) {
             >
               <span className="fs-5 d-none d-sm-inline">Menu</span>
             </Link>
-            <img
+            {/* <img
               src={`https://portfolio-murex-tau-95.vercel.app/uploads/${user.image}`}
               width={50}
               alt=""
-            />
+            /> */}
             {user.username}
             <ul
               className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
