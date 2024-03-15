@@ -31,16 +31,13 @@ function ProfileList(props) {
     }
   };
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
     getProfiles();
     if (deleteMessage) {
       setTimeout(() => {
         setDeleteMessage(null);
       }, 2000);
     }
-  }, [isAuthenticated, profiles, deleteMessage, navigate]);
+  }, [profiles, deleteMessage, navigate]);
 
   return (
     <div>

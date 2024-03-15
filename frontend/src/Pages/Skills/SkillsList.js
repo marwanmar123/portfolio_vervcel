@@ -30,16 +30,13 @@ function SkillsList(props) {
     }
   };
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
     getSkills();
     if (deleteMessage) {
       setTimeout(() => {
         setDeleteMessage(null);
       }, 2000);
     }
-  }, [isAuthenticated, skills, deleteMessage, navigate]);
+  }, [skills, deleteMessage, navigate]);
 
   return (
     <div>

@@ -1,64 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 import CreateCategory from "./CreateCategory";
 
 const Categories = (props) => {
   const [categories, setCategories] = useState([]);
   const [deleteMessage, setDeleteMessage] = useState("");
+  const [cookies] = useCookies(["token"]);
+  const isAuthenticated = cookies.token;
   const navigate = useNavigate();
 
-  const tokenExistsInCookie = document.cookie
-    .split(";")
-    .some((cookie) => cookie.trim().startsWith("token="));
-
   const getCategories = async () => {
-    const response = await axios.get(
-      "https://portfolio-murex-tau-95.vercel.app/categories",
-      {
-        withCredentials: true,
-      }
+    const catgr = await axios.get(
+      "https://portfolio-murex-tau-95.vercel.app/categories"
     );
-    setCategories(response.data);
+    setCategories(catgr.data);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete?")) {
+    if (window.confirm("wach bs7 bghtu")) {
       try {
         await axios.delete(
-          `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`,
-          { withCredentials: true }
+          `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`
         );
         setCategories(categories.filter((p) => p._id !== id));
-        setDeleteMessage("Deleted successfully");
-      } catch (error) {
-        console.log("Error in delete operation", error);
+        setDeleteMessage("rah tsuprima");
+      } catch (er) {
+        console.log("mochkil f delete");
       }
     }
   };
-
   useEffect(() => {
-    if (!tokenExistsInCookie) {
-      navigate("/login");
-    } else {
-      getCategories();
-    }
+    getCategories();
     if (deleteMessage) {
       setTimeout(() => {
-        setDeleteMessage("");
+        setDeleteMessage(null);
       }, 2000);
     }
-  }, [tokenExistsInCookie, deleteMessage, navigate, categories]);
-
-  const getTokenFromCookie = () => {
-    const tokenCookie = document.cookie
-      .split(";")
-      .find((cookie) => cookie.trim().startsWith("token="));
-    if (tokenCookie) {
-      return tokenCookie.split("=")[1];
-    }
-    return null;
-  };
+  }, [categories, deleteMessage, navigate]);
 
   return (
     <div>

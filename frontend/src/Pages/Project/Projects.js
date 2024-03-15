@@ -33,16 +33,13 @@ function Projects(props) {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
     getProjects();
     if (deleteMessage) {
       setTimeout(() => {
         setDeleteMessage(null);
       }, 2000);
     }
-  }, [isAuthenticated, projects, deleteMessage, navigate]);
+  }, [projects, deleteMessage, navigate]);
 
   return (
     <div>
