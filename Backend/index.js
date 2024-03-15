@@ -19,6 +19,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
+      "http://localhost:3000",
       "https://portfolio-vervcel.vercel.app",
       "https://portfolio-vervcel-back.vercel.app",
     ],
