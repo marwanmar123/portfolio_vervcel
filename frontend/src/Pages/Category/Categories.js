@@ -8,52 +8,71 @@ const Categories = (props) => {
   const [categories, setCategories] = useState([]);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [cookies] = useCookies(["token"]);
-  const isAuthenticated = !!cookies.token; // Check if token exists
   const navigate = useNavigate();
 
-  const getCategories = async () => {
-    const response = await axios.get(
-      "https://portfolio-murex-tau-95.vercel.app/categories",
-      {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`, // Attach token to request headers
-        },
-      }
-    );
-    setCategories(response.data);
+  // Securely check for token existence and redirect if necessary
+  const isAuthenticated = () => {
+    if (!cookies.token) {
+      // Redirect to login if token is not present
+      navigate("/login");
+      return false; // Explicitly return false to block further execution
+    }
+    return true; // Token exists, proceed
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete?")) {
+  const getCategories = async () => {
+    const isUserAuthenticated = isAuthenticated(); // Check authentication first
+
+    if (isUserAuthenticated) {
+      // Only fetch categories if user is authenticated
       try {
-        await axios.delete(
-          `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`,
+        const catgr = await axios.get(
+          "https://portfolio-murex-tau-95.vercel.app/categories",
           {
             headers: {
-              Authorization: `Bearer ${cookies.token}`, // Attach token to request headers
+              Authorization: `Bearer ${cookies.token}`, // Include token in headers
             },
           }
         );
-        setCategories(categories.filter((p) => p._id !== id));
-        setDeleteMessage("Deleted successfully");
+        setCategories(catgr.data);
       } catch (error) {
-        console.log("Error in delete operation", error);
+        console.error("Error fetching categories:", error);
+      }
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("wach bs7 bghtu")) {
+      try {
+        const isUserAuthenticated = isAuthenticated(); // Check for token again
+
+        if (isUserAuthenticated) {
+          await axios.delete(
+            `https://portfolio-murex-tau-95.vercel.app/category/delete/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${cookies.token}`,
+              },
+            }
+          );
+          setCategories(categories.filter((p) => p._id !== id));
+          setDeleteMessage("rah tsuprima");
+        }
+      } catch (er) {
+        console.error("Error deleting category:", er);
       }
     }
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    } else {
-      getCategories();
-    }
+    // Check authentication and fetch data on initial render and token change
+    getCategories();
     if (deleteMessage) {
       setTimeout(() => {
-        setDeleteMessage("");
+        setDeleteMessage(null);
       }, 2000);
     }
-  }, [isAuthenticated, cookies.token, deleteMessage, navigate]);
+  }, [cookies.token, deleteMessage, categories]); // Add `cookies.token` to dependencies
 
   return (
     <div>
