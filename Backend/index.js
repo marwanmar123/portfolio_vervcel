@@ -38,12 +38,12 @@ mongoose
 
 app.get("/", (req, res) => res.send("ok"));
 
-app.use("/", auth);
-app.use("/", profile);
-app.use("/", category);
-app.use("/", project);
-app.use("/", skill);
-app.use("/", contact);
+app.use("/api", auth);
+app.use("/api", profile);
+app.use("/api", category);
+app.use("/api", project);
+app.use("/api", skill);
+app.use("/api", contact);
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");
