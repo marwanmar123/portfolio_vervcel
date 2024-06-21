@@ -60,4 +60,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-module.exports = app;
+module.exports = {
+  async handle(request, response) {
+    return new Promise((resolve, reject) => {
+      app(request, response, resolve);
+    });
+  },
+};
