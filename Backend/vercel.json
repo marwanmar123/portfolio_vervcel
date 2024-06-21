@@ -21,7 +21,7 @@
     {
       "src": "/(.*)",
       "dest": "frontend/public/index.html",
-       "handle": "filesystem"
+      "handle": "filesystem"
     }
   ]
   }
