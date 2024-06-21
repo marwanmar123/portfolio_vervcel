@@ -20,7 +20,8 @@
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/public/index.html"
+      "dest": "frontend/public/index.html",
+       "handle": "filesystem"
     }
   ]
   }
