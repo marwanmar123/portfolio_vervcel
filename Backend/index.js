@@ -26,7 +26,12 @@ app.use(
 const PORT = process.env.PORT || 5000;
 
 mongoose
-  .connect(process.env.DB)
+  .connect(process.env.DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000
+})
   .then(() => {
     app.listen(PORT, () => {
       console.log(`server rah mrani t7t lpor ${PORT}`);
